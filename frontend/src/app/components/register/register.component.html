@@ -1,0 +1,78 @@
+<div class="col-md-12 mt-2">
+    <p *ngIf="status != 'success'">
+        Regístrate en la plataforma y empieza a realizarte en el empleo de tus sueños.
+    </p>
+     
+    <div class="alert alert-success" *ngIf="status == 'success'">
+        Registro compoletado.
+        <a [routerLink]="['/login']">Loguéate.</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="status == 'error'">
+        Sucedío algún error en registro. Intentalo más tarde. 
+        Prueba con otro email, el actual ya está registrado.
+    </div>
+
+
+    <!-- Formulario de registro -->
+    <form class="col-md-5" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+        
+        <div class="col-auto">
+            <label for="name" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Nombre: </label>
+        </div>
+        <div class="col-auto">
+            <input type="text" id="name" name="name" class="form-control-sm" placeholder="Escribe tu nombre"
+            #name="ngModel" [(ngModel)]="user.name"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+            <small  *ngIf="name.touched && !name.valid" class="invalid-feedback d-block">
+                El nombre no es válido
+            </small>
+        </div>
+
+        <div class="col-auto">
+            <label for="surname" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Apellidos: </label>
+        </div>
+        <div class="col-auto">
+            <input type="text" id="surname" name="surname" class="form-control-sm" placeholder="Escribe tu apellidos"
+            #surname="ngModel" [(ngModel)]="user.surname"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+            <small *ngIf="surname.touched && !surname.valid" class="invalid-feedback d-block">
+                El apellido no es válido
+            </small>
+        </div>
+            
+        <div class="col-auto">
+            <label for="role_id" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Rol: </label>
+        </div>
+        <div class="col-auto">
+            <select id="role_id" name="role_id" class="form-select"  #role_id="ngModel" [(ngModel)]="user.role_id" [ngStyle]="{'font-size.px': 16}">
+                <option value="2" [ngStyle]="{'font-size.px': 16}">Empleador</option>
+                <option value="3" [ngStyle]="{'font-size.px': 16}">Demandante</option>
+            </select>
+            
+        </div>
+        
+        <div class="col-auto">
+            <label for="email" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Email: </label>
+        </div>
+        <div class="col-auto">
+            <input type="email" id="email" name="email" class="form-control-sm" placeholder="Escribe tu email"
+            #email="ngModel" [(ngModel)]="user.email"  required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" [ngStyle]="{'font-size.px': 16}">
+            <small *ngIf="email.touched && !email.valid" class="invalid-feedback d-block" >
+                El email no es válido
+            </small>
+           
+        </div>
+
+        <div class="col-auto">
+            <label for="password" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Contraseña: </label>
+        </div>
+        <div class="col-auto">
+            <input type="password" id="password" name="password" class="form-control-sm" placeholder="Escribe la contraseña"
+            #password="ngModel" [(ngModel)]="user.password"  required [ngStyle]="{'font-size.px': 16}">
+            <small *ngIf="password.touched && !password.valid" class="invalid-feedback d-block">
+                El password no es válido.
+            </small>
+        </div>
+        <br>
+        <input type="submit" value="REGISTRARSE" class="btn btn-success ml-3" [disabled]="registerForm.invalid" [ngStyle]="{'font-size.px': 16}">
+    </form>
+</div>

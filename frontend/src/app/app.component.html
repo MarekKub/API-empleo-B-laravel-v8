@@ -1,0 +1,90 @@
+<div class="container"> <!-- Contenedor principal-->
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">  <!--Barra navegacion-->
+    <a class="navbar-brand" href="#">
+      <img src="assets\images\job-concept.jpg" width="40" height="40">
+    </a>
+    <a class="navbar-brand" [routerLink]="['/inicio']">Listjobs</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <!-- Grupo de enlaces que se habilitan una vez que el usuario se encuentra registrado.
+        Permite: 
+      - crear una entrada
+      - crear una categoria
+      - acceder al perfil del usuario
+      - acceder a ajustes
+      - cerrar la sesion
+    -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" [routerLink]="['/inicio']">Inicio <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item" *ngFor="let category of categories">
+          <a class="nav-link" [routerLink]="['/category-detail', category.id]">{{category.name}}</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav" *ngIf="identity && identity.name">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{{ url + 'user/getImage/' + identity.image }}" class="user_image_home_page_styles" *ngIf="identity.image"/>
+              <img src="{{ '../../assets/images/default_user.jpg' }}" class="user_image_home_page_styles" *ngIf="!identity.image"/>     
+            {{identity.name + ' ' +  identity.surname}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <span  [ngSwitch]="identity.role_id">
+              <span *ngSwitchCase="1">
+                <a class="dropdown-item" [routerLink]="['/category-new']">Crear categoría</a> <!-- DABA ERROR EL *ngIf QUE HABIA EN ESTA ETIQUETA, PORQUE SOBRABA, YA QUE ESTA EN <span>-->
+              </span>
+              <span *ngSwitchCase="2">
+                <a class="dropdown-item"[routerLink]="['/job-offer-new']">Crear oferta</a>
+              </span>
+              <span *ngSwitchCase="3">
+  
+              </span>
+            </span>         
+            <div class="dropdown-divider"></div>
+            <span  [ngSwitch]="identity.role_id">
+              <span *ngSwitchCase="1">
+
+              </span>
+              <span *ngSwitchCase="2">
+                <a class="dropdown-item" [routerLink]="['/profile', identity.sub]">Mis ofertas</a>
+              </span>
+              <span *ngSwitchCase="3">
+                <a class="dropdown-item" [routerLink]="['/profile', identity.sub]">Mis ofertas</a>
+              </span>           
+            </span>
+            <a class="dropdown-item" [routerLink]="['/ajustes']">Ajustes</a>
+            <a class="dropdown-item" [routerLink]="['/logout/1']">Cerrar sesión</a>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Grupo de enlaces que permiten le login y registro de un usuario  -->
+      <ul class="navbar-nav mr-auto"  *ngIf="!identity.name">
+        <li class="nav-item active">
+          <a class="nav-link" [routerLink]="['/login']">LOGIN <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/registro']">REGISTRO</a>
+        </li>
+        </ul>
+    </div>
+  </nav> <!--Cierre barra navegacion-->
+
+  <router-outlet></router-outlet>
+
+  <footer>
+    <div align="right">
+      <a href="mailto:marekfkomurka@gmail.com?subject=Tengo%20un%20problema%20con...&body=Necesito%20asesoramiento%20para..." 
+                        class="btn btn-info mr-2">CONTACTO - MANDAR EMAIL<br>(Incidencias)</a>
+    </div>
+    <div>
+    Página web empresa ListJobs &copy;
+  </div>
+  </footer>
+
+</div>  <!--Cierre contenedor principal-->

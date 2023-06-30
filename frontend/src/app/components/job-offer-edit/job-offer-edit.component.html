@@ -1,0 +1,212 @@
+<div class="col-md-12 mt-2">
+    <!-- Bloque de vista para role_id =1 (ADMIN) tiene todos privilegios para
+    cualquier JobOffer-->
+    <span *ngIf="identity.role_id == 1">        
+        <div class="alert alert-success" *ngIf="status == 'success'">
+            Oferta de trabajo modificada
+            <a [routerLink]="['/home']">Ir página principal.</a>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="status == 'error'">
+            Sucedío algún error en login. Intentalo más tarde. 
+            <a [routerLink]="['/home']">Ir página principal.</a>
+        </div>
+    
+        <!-- Formulario de registro -->
+        <form class="col-md-5" #jobOfferEditForm="ngForm" (ngSubmit)="onSubmit(jobOfferEditForm)">
+            <!--INPUT TITLE-->    
+            <div class="form-group">
+                <div class="col-auto">
+                    <label for="name" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Título: </label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" id="title" name="title" class="form-control" placeholder="Escribe el título de la oferta de trabajo"
+                    #title="ngModel" [(ngModel)]="jobOffer.title"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                    <small  *ngIf="title.touched && !title.valid" class="invalid-feedback d-block">
+                        El título no es válido
+                    </small>
+                </div>    
+                </div>   
+    <!-- INPUT CATEGORIA-->
+            <div class="form-group">
+                <div class="col-auto">
+                    <label for="category" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Categoría: </label>
+                </div>
+                <div class="col-auto">
+                    <select name="category_id" #category="ngModel" [(ngModel)]="jobOffer.category_id" class="form-control">
+                    <option *ngFor="let category of categories" value="{{category.id}}">
+                        {{category.name}}
+                    </option>
+                </select>
+                </div>    
+            </div>   
+    <!--INPUT CONTENT - DE TIPO FLORALA WSIWIVYG-->  
+            <div class="form-group">
+                <div class="col-auto">
+                    <label for="content" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Descripción: </label>
+                </div>    
+                <div class="col-auto">
+                    <textarea [froalaEditor]="froala_options" id="content" name="content" class="form-control-sm" placeholder="Escribe tu bios"
+                    #content="ngModel" [(ngModel)]="jobOffer.content"  [ngStyle]="{'font-size.px': 16}"></textarea>
+                </div>           
+            </div>
+    
+    <!--INPUT IMAGE, DE TIPO FILE-UPLOADER-->  
+    
+                <div class="form-group">
+                <div class="col-auto">
+                    <label for="image" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Imagen: </label>
+                </div>                
+                <div class="col-auto">
+                <angular-file-uploader 
+                    [config]="afuConfigImg"
+                    [resetUpload]="true"
+                    (ApiResponse)="imageUpload($event)">
+                </angular-file-uploader>
+                <hr>
+    
+                <div *ngIf="jobOffer && jobOffer.image">
+                    <img src="{{ url +'joboffer/image/' + jobOffer.image }}" 
+                    class="user_image_styles">
+                </div>
+                
+                </div>       
+            </div>
+            
+        <!--INPUT SARARY-->      
+            <div class="form-group">
+                <div class="col-auto">
+                    <label for="salary" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Salario: </label>
+                </div>
+                <input type="text" id="salary" name="salary" class="form-control" placeholder="Escribe la retribución:"
+                #salary="ngModel" [(ngModel)]="jobOffer.salary"  required pattern="[0-9]+" [ngStyle]="{'font-size.px': 16}">
+                <small  *ngIf="salary.touched && !salary.valid" class="invalid-feedback d-block">
+                    El salario no es válido
+                </small>
+            </div> 
+        <!--INPUT tipo--> 
+            <div class="form-group">
+                <div class="col-auto">
+                    <label for="type" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Tipo de contrato: </label>
+                </div>
+                <input type="text" id="type" name="type" class="form-control" placeholder="Escribe el tipo de contrato:"
+                #type="ngModel" [(ngModel)]="jobOffer.type"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                <small  *ngIf="type.touched && !type.valid" class="invalid-feedback d-block">
+                    El tipo de contrato no es válido
+                </small>
+            </div> 
+    
+            <input type="submit" value="GUARDAR CAMBIOS" class="btn btn-success ml-3" [disabled]="jobOfferEditForm.invalid" [ngStyle]="{'font-size.px': 16}">
+        </form>
+    </span>
+    
+    <!-- Bloque codigo para role_id = 2 (Empleador) solo puede editar las ofertas 
+    creadas por el, es decir, cuando: jobOffer.user_id = identity.sub  -->
+    <span *ngIf="identity.role_id == 2 && jobOffer.user_id == identity.sub">        
+            <div class="alert alert-success" *ngIf="status == 'success'">
+                Oferta de trabajo modificada
+                <a [routerLink]="['/home']">Ir página principal.</a>
+            </div>
+
+            <div class="alert alert-danger" *ngIf="status == 'error'">
+                Sucedío algún error en login. Intentalo más tarde. 
+                <a [routerLink]="['/home']">Ir página principal.</a>
+            </div>
+        
+            <!-- Formulario de registro -->
+            <form class="col-md-5" #jobOfferEditForm="ngForm" (ngSubmit)="onSubmit(jobOfferEditForm)">
+                <!--INPUT TITLE-->    
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="name" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Título: </label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Escribe el título de la oferta de trabajo"
+                        #title="ngModel" [(ngModel)]="jobOffer.title"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                        <small  *ngIf="title.touched && !title.valid" class="invalid-feedback d-block">
+                            El título no es válido
+                        </small>
+                    </div>    
+                    </div>   
+        <!-- INPUT CATEGORIA-->
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="category" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Categoría: </label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="category_id" #category="ngModel" [(ngModel)]="jobOffer.category_id" class="form-control">
+                        <option *ngFor="let category of categories" value="{{category.id}}">
+                            {{category.name}}
+                        </option>
+                    </select>
+                    </div>    
+                </div>   
+        <!--INPUT CONTENT - DE TIPO FLORALA WSIWIVYG-->  
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="content" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Descripción: </label>
+                    </div>    
+                    <div class="col-auto">
+                        <textarea [froalaEditor]="froala_options" id="content" name="content" class="form-control-sm" placeholder="Escribe tu bios"
+                        #content="ngModel" [(ngModel)]="jobOffer.content"  [ngStyle]="{'font-size.px': 16}"></textarea>
+                    </div>           
+                </div>
+        
+        <!--INPUT IMAGE, DE TIPO FILE-UPLOADER-->  
+        
+                    <div class="form-group">
+                    <div class="col-auto">
+                        <label for="image" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Imagen: </label>
+                    </div>                
+                    <div class="col-auto">
+                    <angular-file-uploader 
+                        [config]="afuConfigImg"
+                        [resetUpload]="true"
+                        (ApiResponse)="imageUpload($event)">
+                    </angular-file-uploader>
+                    </div>
+                    <hr>
+        
+                    <div *ngIf="jobOffer && jobOffer.image">
+                        <img src="{{ url +'joboffer/image/' + jobOffer.image }}" class="avatar_edit"
+                        class="user_image_styles">
+                    </div>
+                    
+                           
+                </div>
+                
+            <!--INPUT SARARY-->      
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="salary" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Salario: </label>
+                    </div>
+                    <input type="text" id="salary" name="salary" class="form-control" placeholder="Escribe la retribución:"
+                    #salary="ngModel" [(ngModel)]="jobOffer.salary"  required pattern="[0-9]+" [ngStyle]="{'font-size.px': 16}">
+                    <small  *ngIf="salary.touched && !salary.valid" class="invalid-feedback d-block">
+                        El salario no es válido
+                    </small>
+                </div> 
+            <!--INPUT tipo--> 
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="type" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Tipo de contrato: </label>
+                    </div>
+                    <input type="text" id="type" name="type" class="form-control" placeholder="Escribe el tipo de contrato:"
+                    #type="ngModel" [(ngModel)]="jobOffer.type"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                    <small  *ngIf="type.touched && !type.valid" class="invalid-feedback d-block">
+                        El tipo de contrato no es válido
+                    </small>
+                </div> 
+        
+                <input type="submit" value="GUARDAR CAMBIOS" class="btn btn-success ml-3" [disabled]="jobOfferEditForm.invalid" [ngStyle]="{'font-size.px': 16}">
+            </form>
+    </span>
+    <span *ngIf="identity.role_id == 2 && jobOffer.user_id != identity.sub">  
+        <h3>No tiene privilegios para ver esta página. No ha creado la oferta de trabajo</h3>
+        <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+    </span>
+    <span *ngIf="identity.role_id == 3">
+        <h3>No tiene privilegios para ver esta página.</h3>
+        <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+    </span>
+</div>

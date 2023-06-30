@@ -1,0 +1,131 @@
+<div class="col-md-12 mt-2">
+
+    <p *ngIf="status != 'success'">
+        Modifica los datos de usuario.
+    </p>
+
+    
+
+    <!-- Formulario de ajustes -->
+    <form class="col-md-5" #userEditForm="ngForm" (ngSubmit)="onSubmit(userEditForm)">
+        <div class="form-group">
+            <div class="col-auto">
+                <label for="name" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Nombre: </label>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="name" name="name" class="form-control-sm" placeholder="Escribe tu nombre"
+                #name="ngModel" [(ngModel)]="user.name"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                <small  *ngIf="name.touched && !name.valid" class="invalid-feedback d-block">
+                    El nombre no es válido
+                </small>
+            </div>
+        </div>    
+        <div class="form-group">
+            <div class="col-auto">
+                <label for="surname" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Apellidos: </label>
+            </div>
+            <div class="col-auto">
+                <input type="text" id="surname" name="surname" class="form-control-sm" placeholder="Escribe tu apellidos"
+                #surname="ngModel" [(ngModel)]="user.surname"  required pattern="[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+" [ngStyle]="{'font-size.px': 16}">
+                <small *ngIf="surname.touched && !surname.valid" class="invalid-feedback d-block">
+                    El apellido no es válido
+                </small>
+            </div>
+        </div>   
+
+        <div class="form-group">
+            <div class="col-auto">
+                <label for="email" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Email: </label>
+            </div>
+            <div class="col-auto">
+                <input type="email" id="email" name="email" class="form-control-sm" placeholder="Escribe tu email"
+                #email="ngModel" [(ngModel)]="user.email"  required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$"
+                 [ngStyle]="{'font-size.px': 16}">
+                <small *ngIf="email.touched && !email.valid" class="invalid-feedback d-block">
+                    El email no es válido
+                </small>
+            </div>
+        </div>    
+
+        <div class="form-group">
+            <div class="col-auto">
+                <label for="description" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Bios: </label>
+            </div>
+            <div class="col-auto">
+                <textarea [froalaEditor]="froala_options" id="description" name="description" class="form-control-sm" placeholder="Escribe tu bios"
+                #description="ngModel" [(ngModel)]="user.description"  [ngStyle]="{'font-size.px': 16}" >
+                {{user.description}}</textarea>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-auto">
+                <label for="image" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Imagen de perfil: </label>
+            </div>         
+
+            <div class="col-auto">
+                <angular-file-uploader 
+                [config]="afuConfigImg"
+                [resetUpload]="true"
+                (ApiResponse)="imageUpload($event)">
+            </angular-file-uploader>
+            <hr>
+
+            <div *ngIf="identity && identity.image">
+                <img src="{{ url +'user/getImage/' + identity.image }}" class="avatar_edit"
+                class="user_image_styles">
+            </div>
+            
+            </div>
+        </div>
+
+        <span  [ngSwitch]="identity.role_id">
+            <span *ngSwitchCase="1">
+    
+            </span>
+            <span *ngSwitchCase="2">
+                
+            </span>
+            <span *ngSwitchCase="3">
+                <div class="form-group">
+                    <div class="col-auto">
+                        <label for="curriculo" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Currículo: </label>
+                    </div>
+        
+                    <div class="col-auto">
+                        <angular-file-uploader 
+                        [config]="afuConfigPdf"
+                        [resetUpload]="true"
+                        (ApiResponse)="pdfUpload($event)">
+                    </angular-file-uploader>
+                    <hr>
+        
+                    <pdf-viewer src="{{ url + 'user/getpdf/' + identity.curriculo }}"
+                      [render-text]="true"
+                      [original-size]="false"
+                      style="width: 800px; height: 500px"
+                    ></pdf-viewer>
+                    
+                    </div>
+                </div>
+            </span>           
+          </span>
+
+
+        <br>
+        <input type="submit" value="GUARDAR CAMBIOS" class="btn btn-success ml-3" [disabled]="userEditForm.invalid"
+        [ngStyle]="{'font-size.px': 12}"> 
+    </form>
+
+    <br>
+    <br>
+    <div class="alert alert-success" *ngIf="status == 'success'">
+        Los datos se han guardado correctamente.
+        <a [routerLink]="['/inicio']">Ir a inicio</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="status == 'error'">
+        Sucedío algún error en la actualización de datos. Intentalo más tarde. 
+        
+    </div>
+</div>

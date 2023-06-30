@@ -1,0 +1,32 @@
+<div class="col-md-12 mt-2">     
+    <!--Solo user con role_id=2 tiene acceso a esta vista-->
+    <span *ngIf="identity.role_id == 2">
+        <div>
+
+<!-- Boton que permite volver a la vista job-offer-check-applicants de la jobOffer que se esta consultando
+los candidatos. -->
+
+            <a [routerLink]="['/job-offer-check/', jobOffer_id]" class="btn btn-success mr-2">VOLVER A CANDIDATOS</a>
+        </div>
+        <div class="form-group">
+           
+            <div class="col-auto">
+                <label for="curriculo" class="col-form-label" [ngStyle]="{'font-size.px': 16}">
+                    Currículo:  {{user.name}} {{user.surname}}</label>
+            </div>
+
+            <pdf-viewer src="{{ url + 'user/getpdf/' + user.curriculo }}"
+            [render-text]="true"
+            [original-size]="false"
+            style="width: 800px; height: 500px"
+            ></pdf-viewer>
+         
+        </div>
+    </span>
+    <span *ngIf="identity.role_id == 3">
+        <h3>No tiene privilegios para ver esta página.</h3>
+        <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+    </span>
+               
+   
+</div>

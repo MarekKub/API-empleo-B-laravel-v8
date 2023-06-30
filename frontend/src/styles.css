@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+.user_image_styles{
+    width: 148px;
+    height: 184px;
+}
+
+.user_image_home_page_styles{
+    width: 60px;
+    height: 80px;
+}
+
+
+.avatar_edit{
+    width: 80px;
+    margin: 10px;
+}
+
+.w-200{
+    height: 200px;
+    height: 150px;
+}
+
+
+a{
+    font-size: 14px;
+}
+
+footer{
+    font-size: 14px;
+    color: lightgray;
+}
+
+.text-14{
+    font-size: 18px;
+    margin-left: 50px;
+}
+
+.text-job-offer-filled{
+    font-size: 32px;
+    margin-right: 15px;
+    color: red;
+    font-weight: fw-bold;
+}
+
+.text-job-offer-applied{
+    font-size: 24px;
+    margin-right: 15px;
+    color: green;
+    font-weight: fw-bold;
+}
+
+

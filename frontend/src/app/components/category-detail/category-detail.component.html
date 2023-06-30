@@ -1,0 +1,42 @@
+<!-- Comprueba si hay jobOffers que mostrar -->
+<div class="container-fluid" *ngIf=" jobOffers.length == 0">
+        <h2>¡No hay ofertas de trabajo que mostrar!</h2>
+</div>
+<!-- Comprueba si hay jobOffers que mostrar -->
+<div class="container-fluid" *ngIf="jobOffers">
+    <div class="card-columns">
+        <article class="card w-100" *ngFor="let jobOffer of jobOffers">
+
+            <span *ngIf="jobOffer.status_id == 0">
+                <div class="card-header">
+                    <h3>
+                        <a [routerLink]="['/inicio']">{{jobOffer.title}}</a>
+                    </h3>
+                </div>   
+
+                <div class="card-body" *ngIf="!jobOffer.image">
+                    <img src="{{ '../../assets/images/default_job.jpg' }}" class="w-200" *ngIf="!jobOffer.image">
+                    <h4 class="font-monospace">Salario: {{jobOffer.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{jobOffer.type}}</h4>
+                </div>
+                <div class="card-body" *ngIf="jobOffer.image">
+                    <!-- IMAGEN O TEXTO-->
+                    <img src="{{ url + 'joboffer/image/' + jobOffer.image }}" class="w-200" *ngIf="jobOffer.image">
+                    <h4 class="font-monospace">Salario: {{jobOffer.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{jobOffer.type}}</h4>               
+                </div>
+
+                <!-- BOTONES DE ACCION: botones Editar y Eliminar solo son visibles 
+                si el usuario identificado en al app es quien los a creado.-->           
+                <div class="post-buttons mt-3">
+                    <a [routerLink]="['/job-offer-detail/', jobOffer.id]" class="btn btn-success mr-2 ml-3">Leer</a>
+                    <span *ngIf="identity && jobOffer.user_id == identity.sub || identity.role_id == 1">
+                        <a [routerLink]="['/job-offer-edit/', jobOffer.id]" class="btn btn-warning mr-2">Editar</a>
+                    </span>
+                </div>     
+            </span>
+        </article>
+    </div> 
+      
+</div>
+

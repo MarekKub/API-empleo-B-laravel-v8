@@ -1,0 +1,45 @@
+<div class="col-md-12 mt-2">
+    <p>Loguéate y empieza a buscar trabajo.</p>
+
+    <div class="alert alert-success" *ngIf="status == 'success'">
+        Login compoletado.
+        <a [routerLink]="['/login']">Loguéate.</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="status == 'error'">
+        Sucedío algún error en login. Intentalo más tarde. 
+        
+    </div>
+    
+    <form method="post" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="col-md-5">
+
+        <div class="col-auto">
+            <label for="email" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Email: </label>
+        </div>
+        <div class="col-auto">
+            <input type="email" name="email" id="email" placeholder="Escribe tu email" 
+             #email="ngModel" [(ngModel)]="user.email" 
+            required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" class="form-control-sm" [ngStyle]="{'font-size.px': 16}">
+            <small *ngIf="email.touched && !email.valid" class="invalid-feedback d-block">
+                El email no es válido.
+            </small>
+        </div>    
+        <br>
+        <div class="col-auto">
+            <label for="password" class="col-form-label" [ngStyle]="{'font-size.px': 16}">Contraseña: </label>
+        </div>
+        <div class="col-auto"> 
+            <input type="password" name="password" id="password" placeholder="Escribe tu contraseña"
+             #password="ngModel" [(ngModel)]="user.password"
+            required class="form-control-sm" [ngStyle]="{'font-size.px': 16}">
+            <small *ngIf="password.touched && !password.valid" class="invalid-feedback d-block">
+                La contraseña no se correcta
+            </small>
+        </div> 
+        <br>
+        <div class="col-auto">
+            <input type="submit" value="ENTRAR" [disabled]="loginForm.invalid"  class="btn btn-success ml-3">
+        </div>
+      
+    </form>
+</div>

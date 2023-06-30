@@ -1,0 +1,92 @@
+<p>{{page_title}}</p>
+<div>
+    <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+</div>
+<br>
+<span *ngIf="identity.sub"> 
+<!--Se ejecuta si el objeto jobOffers existe-->
+    <div class="container-fluid" *ngIf="jobOffers">
+    
+        <div class="card-columns">
+            <article class="card w-100" *ngFor="let jobOffer of jobOffers">
+                <div class="card-header">
+                    <h3>
+                        <a [routerLink]="['/inicio']">{{jobOffer.title}}</a>
+                    </h3>
+                </div>        
+                <div class="card-body" *ngIf="!jobOffer.image">
+                    <img src="{{ '../../assets/images/default_job.jpg' }}" class="w-200" *ngIf="!jobOffer.image">
+                    <h4 class="font-monospace">Salario: {{jobOffer.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{jobOffer.type}}</h4>
+                </div>
+                <div class="card-body" *ngIf="jobOffer.image">
+                    <!-- IMAGEN O TEXTO-->
+                    <img src="{{ url + 'joboffer/image/' + jobOffer.image }}" class="w-200" *ngIf="jobOffer.image">
+                    <h4 class="font-monospace">Salario: {{jobOffer.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{jobOffer.type}}</h4>               
+                </div>
+
+                <!-- BOTONES DE ACCION: botones Editar y Eliminar solo son visibles 
+                si el usuario identificado en al app es quien los a creado.-->
+                <div class="post-buttons mt-3">
+                    <a [routerLink]="['/job-offer-detail/', jobOffer.id]" class="btn btn-success mr-2 ml-3">Leer</a>
+                    <span *ngIf="identity && jobOffer.user_id == identity.sub">
+                        <a [routerLink]="['/job-offer-edit/', jobOffer.id]" class="btn btn-warning mr-2">Editar</a>
+    <!--COMENTO POR AHORA, POR SI LUEGO TENGO QUE VOLVER A PONER ESTE BOTON    <a [routerLink]="['/inicio']" class="btn btn-danger mr-2">Eliminar</a>   -->
+                    </span>
+                    <span align="right" *ngIf="jobOffer.status_id == 1">
+                            <p class="text-job-offer-filled">CUBIERTA</p>
+                    </span>   
+                    <span *ngIf="jobOffer.status_id == 2">
+                        <p class="text-job-offer-filled">DADA DE BAJA</p>
+                     </span>
+                </div>
+
+                
+            </article>
+        </div>    
+    </div>
+    <!--Se ejecuta si el objeto applicants existe-->
+        <div class="container-fluid" *ngIf="applicants">
+            <div class="card-columns">
+            <article class="card w-100" *ngFor="let applicant of applicants">
+                <div class="card-header">
+                    <h3>
+                    
+                        <a [routerLink]="['/inicio']">{{applicant.title}}</a>
+                    </h3>
+                </div>        
+                <div class="card-body" *ngIf="!applicant.image">
+                    <img src="{{ '../../assets/images/default_job.jpg' }}" class="w-200" *ngIf="!applicant.image">
+                    <h4 class="font-monospace">Salario: {{applicant.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{applicant.type}}</h4>
+                </div>
+                <div class="card-body" *ngIf="applicant.image">
+                    <!-- IMAGEN O TEXTO-->
+                    <img src="{{ url + 'joboffer/image/' + applicant.image }}" class="w-200" *ngIf="applicant.image">
+                    <h4 class="font-monospace">Salario: {{applicant.salary}}</h4>
+                    <h4 class="font-monospace">Tipo contrato: {{applicant.type}}</h4>               
+                </div>
+
+                <span align="left" *ngIf="applicant.status_id == 0">
+                    <!-- BOTONES DE ACCION: botones Editar y Eliminar solo son visibles 
+                    si el usuario identificado en al app es quien los a creado.-->
+                    <div class="post-buttons mt-3">
+                        <a [routerLink]="['/job-offer-detail/', applicant.id]" class="btn btn-success mr-2 ml-3">Leer</a>
+                    </div>
+                </span>
+
+                <span align="center" *ngIf="applicant.status_id == 1">
+                    <p class="text-job-offer-filled">VACANTE CUBIERTA</p>
+                </span>              
+                <span *ngIf="applicant.status_id == 2">
+                    <p class="text-job-offer-filled">DADA DE BAJA</p>
+                 </span>
+            </article>
+        </div>    
+    </div>
+</span>    
+<span *ngIf="!identity.sub">
+    <h3>No tiene privilegios para ver esta página.</h3>
+    <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+</span>

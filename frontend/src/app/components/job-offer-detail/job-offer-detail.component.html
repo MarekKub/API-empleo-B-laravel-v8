@@ -1,0 +1,81 @@
+
+
+<div class="col-md-12" *ngIf="!jobOffer">
+    Cargando...
+</div>
+
+<div class="col-md-12" *ngIf="jobOffer">
+ <!--   <h1>{{jobOffer.jobOffer}}</h1> -->
+
+
+    <hr/>  
+    <h5>Titulo: </h5>
+    <p>{{jobOffer.title}}</p>
+    <h5>Información: </h5>
+    <p>{{jobOffer.content}}</p>
+    <h5>Sueldo: </h5>
+    <p>{{jobOffer.salary}}</p>
+    <h5>Tipo de contrato: </h5>
+    <p>{{jobOffer.type}}</p>   
+    
+  <!-- Botones de opciones que se muestran segun el role_id del usuario logueado-->
+    <span  [ngSwitch]="identity.role_id">
+        <span *ngSwitchCase="1">
+
+        </span>
+        <span *ngSwitchCase="2">
+            <span *ngIf="identity.role_id==2 && jobOffer.user_id == identity.sub">
+                 <button type="button" class="btn btn-success" [routerLink]="['/job-offer-check/', jobOffer.id]" >VER CANDIDATOS</button>
+            </span>     
+        </span>
+        <span *ngSwitchCase="3">
+            <span *ngIf="jobOffer.status_id == 0">
+                <span *ngIf="!yaApuntadoAjoboffer">
+                    <button type="button" class="btn btn-success" (click)="clickApuntarse()">APUNTARSE</button>
+                </span>
+                <span *ngIf="yaApuntadoAjoboffer">
+                    <h3 class="text-job-offer-applied">YA INSCRITO EN OFERTA</h3>
+                </span>
+            </span>           
+        </span>           
+      </span>
+
+      <!--Boton que se muestar a usuario de role_id=2 (Empleador) 
+        Sirve para cambiar el valor del campo 'filled' (= oferta de trabajo cubierta) del registro 
+        en la tabla job_offers.
+            Este campo se usara para ocultar en las vistas las ofertas que ya estan cubiertas.-->
+        <span *ngIf="identity.role_id==2 && jobOffer.user_id == identity.sub">
+            <span *ngIf="jobOffer.status_id == 0">
+               <button type="button" class="btn btn-warning ml-3" (click)="updateStatusToOne()">CAMBIAR ESTADO A VACANTE CUBIERTA</button>
+            </span>
+            <span *ngIf="jobOffer.status_id == 1">
+                <p class="text-job-offer-filled">ESTADO: Oferta de trabajo cubierta</p>
+             </span>
+             <span *ngIf="jobOffer.status_id == 0">
+                <button type="button" class="btn btn-danger ml-3" (click)="updateStatusToTwo()">CAMBIAR A DAR DE BAJA OFERTA</button>
+             </span>
+             <span *ngIf="jobOffer.status_id == 2">
+                 <p class="text-job-offer-filled">ESTADO: Oferta de trabajo dada de baja</p>
+              </span>
+        </span>
+
+        <!-- Botones se muestran a user con role_id =1 (Admin)-->
+        <span *ngIf="identity.role_id==1">
+            <span *ngIf="jobOffer.status_id == 0">
+               <button type="button" class="btn btn-warning ml-3" (click)="updateStatusToOne()">CAMBIAR ESTADO A VACANTE CUBIERTA</button>
+            </span>
+            <span *ngIf="jobOffer.status_id == 1">
+                <p class="text-job-offer-filled">ESTADO: Oferta de trabajo cubierta</p>
+             </span>
+             <span *ngIf="jobOffer.status_id == 0">
+                <button type="button" class="btn btn-danger ml-3" (click)="updateStatusToTwo()">CAMBIAR A DAR DE BAJA OFERTA</button>
+             </span>
+             <span *ngIf="jobOffer.status_id == 2">
+                 <p class="text-job-offer-filled">ESTADO: Oferta de trabajo dada de baja</p>
+              </span>
+        </span>
+    <hr>
+
+    <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+    
+</div>

@@ -1,0 +1,43 @@
+<h1>{{page_title}}</h1>
+<p class="text-14">{{jobOffer.title}}</p>
+<span *ngFor="let applicant of applicants">
+</span>
+<div>
+    <button type="button" class="btn btn-info" [routerLink]="['/inicio']">Volver a página de inicio</button>
+</div>
+<br>
+
+    <span *ngIf="identity.role_id == 2 || identity.role_id == 1">
+        <div class="card-columns">
+            <article class="card w-100" *ngFor="let applicant of applicants">
+                <div class="card-header">
+                    <h4 class="font-monospace">Nombre: {{applicant.name}}</h4>
+                </div>        
+                <div class="card-body">
+                    <img src="{{ url + 'user/getImage/' + applicant.image }}" class="w-200">
+                </div>
+
+                <!-- BOTONES DE ACCION: botones Editar y Eliminar solo son visibles 
+                si el usuario identificado en al app es quien los a creado.-->
+                <div class="post-buttons mt-3">
+                    <a [routerLink]="['/curriculum/', applicant.id,jobOffer.id]" class="btn btn-success mr-2">LEER CURRICULO</a>
+                    <span *ngIf="identity && jobOffer.user_id == identity.sub">
+                    </span>
+                    <span *ngIf="jobOffer.status_id == 0 || jobOffer.status_id == 1">
+                        <!-- Link que abre el gestor de correo electronico que tenga configurado el usuario en el ordenador,
+                        e inicia a escribir un email a la direccion email del applicant seleccionado. Esto ultimo
+                        se hace con la propiedad mailto: del atributo href de HTML, y se le pasa el valor del campo
+                        'email' del objeto applicant-->
+                        <a href="mailto:{{applicant.email}}?subject=Ha sido seleccionado en la oferta de trabajo" 
+                        class="btn btn-info mr-2">MANDAR EMAIL</a>
+                    </span>
+                </div>
+                
+            </article>
+        </div> 
+    </span>   
+    <span *ngIf="identity.role_id == 3">
+        <h3>No tiene privilegios para ver esta página.</h3>
+    </span>
+<!-- 1)  </div>   -->
+
